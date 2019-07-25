@@ -28,6 +28,7 @@
 #include "server_storage.h"
 
 #include <QDir>
+#include <QHostInfo>
 
 #include <cstdarg>
 #include <cstdio>
@@ -453,6 +454,9 @@ int VpnInfo::connect()
 
     if (key_file.isEmpty() == true)
         key_file = cert_file;
+
+    // register hostname in dns
+    openconnect_set_localname(vpninfo, QHostInfo::localHostName().toLocal8Bit().data());
 
     if (cert_file.isEmpty() != true) {
         openconnect_set_client_cert(vpninfo, cert_file.toLatin1().data(),
